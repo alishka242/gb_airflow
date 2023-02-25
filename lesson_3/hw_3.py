@@ -35,7 +35,7 @@ with DAG(
         drop_hive_table = HiveOperator(
             task_id='drop_hive_table',
             hql='DROP TABLE IF EXISTS titanic;',
-            hive_cli_conn_id = "hive_local",
+            # hive_cli_conn_id = "hive_local",
         )
 
         create_hive_table = HiveOperator(
@@ -55,7 +55,7 @@ with DAG(
                 STORED AS TEXTFILE
                 TBLPROPERTIES('skip.header.line.count'='1');
                 ''',
-            hive_cli_conn_id = "hive_local",
+            # hive_cli_conn_id = "hive_local",
         )
 
         drop_hive_table >> create_hive_table
@@ -64,7 +64,7 @@ with DAG(
         task_id='load_data_to_hive',
         hql='''LOAD DATA INPATH '{{ task_instance.xcom_pull(task_ids='download_titanic_dataset', key='return_value') }}' 
         INTO TABLE titanic;''',
-        hive_cli_conn_id = "hive_local",
+        # hive_cli_conn_id = "hive_local",
     )
 
     show_avg_fare = BashOperator(
